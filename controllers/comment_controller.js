@@ -7,23 +7,29 @@ module.exports = {
 
     create(req,res,next){
         const commentProps = req.body;
-        //        const _id = req.params._id;
-        //        const id = req.params.user;
+        const _id = req.params._id;
+        const id = req.params.user;
 
-        //        .then(comment=>comment.user=User.findOne({_id:id}))
-        //       comment.save()
-        //comment.user=user)
-        //       .then(User.findOne({id}))       
-        //    .then(comment.user=user)
-        //    .then(comment => comment.save())
-        //        review.comments.push(comment);
-        //        user.comments.push(comment);
+        const comment = new Comment({
+            late: commentProps.late,
+            comment: commentProps.comment,
+            grade: commentProps.grade,
+            user: id
+        })
 
-        //        Promise.all([review.save(),comment.save(),user.save()])
-    
-        // stable simple comment creator without linking anything
-        Comment.create(commentProps)
-            .then(comment=>res.send(comment))
+        comment.save()
+            .then(()=>User.findOne({_id:id}))
+            .then((user)=>{
+            user.comments.push(comment._id);
+            return user.save();
+        })
+            .then(()=>Review.findOne({_id}))
+            .then((review)=>{
+            review.comments.push(comment._id);
+            return review.save();
+        })
+
+            .then(res.send(comment))        
             .catch(next);
     }
 };
