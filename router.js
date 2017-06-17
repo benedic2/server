@@ -4,9 +4,9 @@ const passport = require('passport');
 const ReviewController = require ('./controllers/review_controller');
 const ReviewClientController = require('./controllers/review_client_controller');
 const ReviewSearch = require ('./controllers/review_search');
-
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireSignin = passport.authenticate('local', { session: false });
+const CommentController = require ('./controllers/comment_controller');
 
 module.exports = function(app) {
 
@@ -23,6 +23,9 @@ module.exports = function(app) {
     app.get('/reviews/:criteria', ReviewClientController.fetchAll );
     app.get('/review/:_id', ReviewClientController.fetch );
     app.post('/review/search', ReviewSearch.reviewSearch);
+    
+    //Comments 
+    app.post('/comment/:_id/:user',CommentController.create);
     
     
     //SuperUsergroup
