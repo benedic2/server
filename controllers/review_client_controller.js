@@ -9,12 +9,21 @@ module.exports = {
             .then(review=>res.send(review))
             .catch(next);
     },
-    
-        fetch(req,res,next){
-            const _id = req.params._id
+
+    fetch(req,res,next){
+        const _id = req.params._id
         Review.find({_id})
+            .populate({
+            path: 'comments',
+            model: 'comment',
+            options:{sort:{'created_at': -1}},
+            populate: {
+                path: 'user',
+                model: 'user'
+            }
+        })
             .then(review=>res.send(review))
             .catch(next);
-    },
-    
-};
+        },
+
+                      };

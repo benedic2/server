@@ -31,15 +31,17 @@ module.exports = {
 
             .then(res.send(comment))        
             .catch(next);
+    },
+
+    //unused for now becuase the review is already sent by the show review call. Can take the comments off of that call.
+  fetch(req,res,next){
+        const _id= req.params._id
+        Review.find({_id})
+      .populate('comments')
+      .populate('comments.user')
+      .then((review)=>res.send(review))
+      .catch(next);
     }
+    
+
 };
-
-/*
-Stable version of a simple review creation with similar format
-    create(req,res,next){
-        const reviewProps = req.body;
-
-        Review.create(reviewProps)
-            .then(review=>res.send(review))
-            .catch(next);
-            */

@@ -26,6 +26,7 @@ module.exports = function(app) {
     
     //Comments 
     app.post('/comment/:_id/:user',CommentController.create);
+    app.get('/comments/:_id',CommentController.fetch);
     
     
     //SuperUsergroup
